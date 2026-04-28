@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
+import com.example.project2_android_app.database.AppRepository;
+import com.example.project2_android_app.database.entities.User;
 import com.example.project2_android_app.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
+
+    private AppRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +24,12 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        repository = AppRepository.getRepository(getApplication());
+
         binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int userId = 0;
-                startActivity(MainActivity.mainActivityIntentFactory(LoginActivity.this, userId));
+                verifyUser();
             }
         });
     }
@@ -32,4 +38,32 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(context, LoginActivity.class);
         return intent;
     }
+
+    private void verifyUser() {
+        String username = binding.userNameLoginEditText.getText().toString();
+        if (username.isEmpty()) {
+            return;
+        }
+        LiveData<User> userObserver = repository.getUserByUserName(username);
+        userObserver.observe(this, user -> {
+            if (user != null) {
+                String password = binding.passwordLoginEditText.getText().toString();
+                if (isValid(user, password)) {
+                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                } else {
+                    binding.passwordLoginEditText.setSelection(0);
+                }
+            } else {
+                binding.passwordLoginEditText.setSelection(0);
+            }
+        });
+    }
+
+    public static boolean isValid(User user, String password){
+        if (user == null){
+            return false;
+        }
+        return user.getPassword().equals(password);
+    }
+
 }
