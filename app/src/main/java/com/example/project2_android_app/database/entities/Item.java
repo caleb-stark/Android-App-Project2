@@ -7,25 +7,16 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.example.project2_android_app.database.AppDatabase;
+
 /**
  * Represents an item on a shopping list (e.g. "Milk", "Bread").
  * Each item belongs to exactly one ShoppingList via a foreign key on listId.
  *
  * Author: Himansu Yapa
  */
-@Entity(
-        tableName = Item.TABLE_NAME,
-        foreignKeys = @ForeignKey(
-                entity = ShoppingList.class,
-                parentColumns = "listId",
-                childColumns = "listId",
-                onDelete = ForeignKey.CASCADE),
-        indices = {@Index("listId")}
-)
+@Entity(tableName = AppDatabase.ITEM_TABLE)
 public class Item {
-
-    public static final String TABLE_NAME = "item_table";
-
     @PrimaryKey(autoGenerate = true)
     private int itemId;
 

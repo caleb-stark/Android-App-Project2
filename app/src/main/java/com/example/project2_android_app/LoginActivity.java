@@ -41,33 +41,31 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void verifyUser() {
-        String username = binding.userNameLoginEditText.getText().toString();
-        if (username.isEmpty()) {
+        String username = binding.userNameLoginEditText.getText().toString().trim();
+        String password = binding.passwordLoginEditText.getText().toString().trim();
+
+        if(username.isEmpty() || password.isEmpty()){
             return;
         }
-        LiveData<User> userObserver = repository.getUserByUserName(username);
-        userObserver.observe(this, user -> {
-            if (user != null) {
-                String password = binding.passwordLoginEditText.getText().toString();
-                if (isValid(user, password)) {
-                    SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
 
-                    editor.putString("username", user.getUsername());
+        User user = repository.getUserByUserName(username);
 
-                    boolean isAdmin = user.isAdmin();
-                    editor.putBoolean("isAdmin", isAdmin);
+        if(user != null){
+            if(isValid(user, password)){
+                SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("username", user.getUsername());
+                editor.putBoolean("isAdmin", user.isAdmin());
+                editor.apply();
 
-                    editor.apply();
-
-                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
-                } else {
-                    binding.passwordLoginEditText.setSelection(0);
-                }
-            } else {
-                binding.passwordLoginEditText.setSelection(0);
+                startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                finish();
+            }else{
+                binding.passwordLoginEditText.setText("");
             }
-        });
+        }else{
+            binding.passwordLoginEditText.setText("");
+        }
     }
 
     public static boolean isValid(User user, String password){

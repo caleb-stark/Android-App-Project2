@@ -29,15 +29,15 @@ public interface ItemDAO {
     @Delete
     void delete(Item item);
 
-    @Query("SELECT * FROM " + Item.TABLE_NAME + " WHERE itemId = :id LIMIT 1")
+    @Query("SELECT * FROM " + AppDatabase.ITEM_TABLE + " WHERE itemId = :id LIMIT 1")
     Item getItemById(int id);
 
-    @Query("SELECT * FROM " + Item.TABLE_NAME + " WHERE listId = :listId ORDER BY isBought ASC, itemName ASC")
+    @Query("SELECT * FROM " + AppDatabase.ITEM_TABLE + " WHERE listId = :listId ORDER BY isBought ASC, itemName ASC")
     LiveData<List<Item>> getItemsForList(int listId);
 
-    @Query("SELECT * FROM " + Item.TABLE_NAME + " WHERE listId = :listId")
+    @Query("SELECT * FROM " + AppDatabase.ITEM_TABLE + " WHERE listId = :listId")
     List<Item> getItemsForListSync(int listId);
 
-    @Query("SELECT COUNT(*) FROM " + Item.TABLE_NAME + " WHERE listId = :listId")
+    @Query("SELECT COUNT(*) FROM " + AppDatabase.ITEM_TABLE + " WHERE listId = :listId")
     int countItemsForList(int listId);
 }

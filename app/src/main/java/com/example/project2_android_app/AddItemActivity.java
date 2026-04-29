@@ -7,8 +7,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.project2_android_app.database.ShoppingListRepository;
+import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.database.entities.Item;
 import com.example.project2_android_app.databinding.ActivityAddItemBinding;
 
@@ -20,7 +19,7 @@ public class AddItemActivity extends AppCompatActivity {
     private static final String EXTRA_LIST_ID = "com.example.project2_android_app.EXTRA_LIST_ID";
 
     private ActivityAddItemBinding binding;
-    private ShoppingListRepository repository;
+    private AppRepository repository;
     private int listId;
 
     static Intent addItemActivityIntentFactory(Context context, int listId) {
@@ -35,7 +34,7 @@ public class AddItemActivity extends AppCompatActivity {
         binding = ActivityAddItemBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        repository = ShoppingListRepository.getRepository(getApplication());
+        repository = AppRepository.getRepository(getApplication());
         listId = getIntent().getIntExtra(EXTRA_LIST_ID, -1);
 
         binding.buttonSaveItem.setOnClickListener(v -> saveItem());

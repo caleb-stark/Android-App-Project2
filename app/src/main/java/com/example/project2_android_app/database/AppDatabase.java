@@ -9,15 +9,17 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.project2_android_app.database.entities.Item;
 import com.example.project2_android_app.database.entities.User;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {User.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Item.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public static final String USER_TABLE = "userTable";
+    public static final String ITEM_TABLE = "itemTable";
     private static final String DATABASE_NAME = "AppDatabase";
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -59,4 +61,6 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public abstract UserDAO userDAO();
+
+    public abstract ItemDAO itemDAO();
 }

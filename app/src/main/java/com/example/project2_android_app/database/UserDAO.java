@@ -26,8 +26,8 @@ public interface UserDAO {
     @Query("DELETE FROM " + AppDatabase.USER_TABLE)
     void deleteAll();
 
-    @Query("SELECT * FROM " + AppDatabase.USER_TABLE + " WHERE username == :username")
-    LiveData<User> getUserByUserName(String username);
+    @Query("SELECT * FROM " + AppDatabase.USER_TABLE + " WHERE username = :username LIMIT 1")
+    User getUserByUserName(String username);
 
     @Query("SELECT * FROM " + AppDatabase.USER_TABLE + " WHERE id == :userId")
     LiveData<User> getUserByUserId(int userId);
