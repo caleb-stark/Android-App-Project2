@@ -12,6 +12,11 @@ import com.example.project2_android_app.database.entities.ShoppingList;
 import com.example.project2_android_app.databinding.ActivityListBinding;
 import com.example.project2_android_app.viewholders.ItemAdapter;
 
+/**
+ * Shows the items inside a single ShoppingList.
+ *
+ * Author: Himansu Yapa
+ */
 public class ListActivity extends AppCompatActivity {
 
     private static final String EXTRA_LIST_ID = "com.example.project2_android_app.EXTRA_LIST_ID";
@@ -22,8 +27,7 @@ public class ListActivity extends AppCompatActivity {
     private int listId;
     private int userId;
 
-    /** Intent factory. */
-    public static Intent getIntent(Context context, int listId, int userId) {
+    static Intent listActivityIntentFactory(Context context, int listId, int userId) {
         Intent intent = new Intent(context, ListActivity.class);
         intent.putExtra(EXTRA_LIST_ID, listId);
         intent.putExtra(EXTRA_USER_ID, userId);
@@ -44,11 +48,13 @@ public class ListActivity extends AppCompatActivity {
         ShoppingList list = repository.getListById(listId);
         if (list != null) {
             binding.textListTitle.setText(list.getListName());
+        } else {
+            binding.textListTitle.setText("List #" + listId);
         }
 
         ItemAdapter adapter = new ItemAdapter(
                 /* onClick = */ item ->
-                        startActivity(EditItemActivity.getIntent(this, item.getItemId(), listId, userId)),
+                        startActivity(EditItemActivity.editItemActivityIntentFactory(this, item.getItemId())),
                 /* onCheckChanged = */ (item, checked) -> {
                     item.setBought(checked);
                     repository.updateItem(item);
@@ -59,6 +65,6 @@ public class ListActivity extends AppCompatActivity {
         repository.getItemsForList(listId).observe(this, adapter::submitList);
 
         binding.buttonAddItem.setOnClickListener(v ->
-                startActivity(AddItemActivity.getIntent(this, listId, userId)));
+                startActivity(AddItemActivity.addItemActivityIntentFactory(this, listId)));
     }
 }
