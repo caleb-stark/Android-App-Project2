@@ -2,6 +2,7 @@ package com.example.project2_android_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -49,6 +50,16 @@ public class LoginActivity extends AppCompatActivity {
             if (user != null) {
                 String password = binding.passwordLoginEditText.getText().toString();
                 if (isValid(user, password)) {
+                    SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    editor.putString("username", user.getUsername());
+
+                    boolean isAdmin = user.isAdmin();
+                    editor.putBoolean("isAdmin", isAdmin);
+
+                    editor.apply();
+
                     startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
                 } else {
                     binding.passwordLoginEditText.setSelection(0);
