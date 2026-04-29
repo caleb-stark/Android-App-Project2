@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -36,7 +37,35 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = LoginActivity.loginActivityIntentFactory(MainActivity.this);
             startActivity(intent);
             finish();
+            return;
         }
+
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+
+        String username = prefs.getString("username", "Unknown User");
+        boolean isAdmin = prefs.getBoolean("isAdmin", false);
+
+        binding.welcomeTextView.setText("Logged in as: " + username);
+
+        if (isAdmin) {
+            binding.adminButton.setVisibility(View.VISIBLE);
+        } else {
+            binding.adminButton.setVisibility(View.INVISIBLE);
+        }
+
+        binding.logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.clear();
+                editor.apply();
+
+                Intent intent = mainActivityIntentFactory(MainActivity.this, LOGGED_OUT);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     static Intent mainActivityIntentFactory(Context context, int userId) {
