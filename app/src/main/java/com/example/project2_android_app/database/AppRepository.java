@@ -6,16 +6,18 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.example.project2_android_app.database.entities.Item;
+import com.example.project2_android_app.database.entities.ShoppingList;
 import com.example.project2_android_app.database.entities.User;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class AppRepository{
     private final UserDAO userDAO;
-
     private final ItemDAO itemDAO;
+    private final ShoppingListDAO listDAO;
 
     private static AppRepository repository;
 
@@ -23,6 +25,7 @@ public class AppRepository{
         AppDatabase db = AppDatabase.getDatabase(application);
         this.userDAO = db.userDAO();
         this.itemDAO = db.itemDAO();
+        this.listDAO = db.listDAO();
     }
 
     public static AppRepository getRepository(Application application) {
@@ -80,5 +83,13 @@ public class AppRepository{
 
     public void deleteItem(Item currentItem) {
         itemDAO.delete(currentItem);
+    }
+
+    public LiveData<List<ShoppingList>> getListsByUserId(int userId){
+        return listDAO.getListsByUserId(userId);
+    }
+
+    public void insertList(ShoppingList list){
+        listDAO.insert(list);
     }
 }

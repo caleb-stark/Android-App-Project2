@@ -17,7 +17,6 @@ public class AdminActivity extends AppCompatActivity {
 
     private ActivityAdminBinding binding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

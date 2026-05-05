@@ -8,17 +8,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.databinding.ActivityMainBinding;
+import com.example.project2_android_app.viewholders.ShoppingListAdapter;
 
 public class MainActivity extends AppCompatActivity {
     private static final String MAIN_ACTIVITY_USER_ID = "com.example.project2_android_app.MAIN_ACTIVITY_USER_ID";
     private static final int LOGGED_OUT = -1;
+
     private ActivityMainBinding binding;
     private AppRepository repository;
     private int loggedInUserId = -1;
     private boolean isAdmin = false;
+    private ShoppingListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         repository = AppRepository.getRepository(getApplication());
         loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
 
-        if (loggedInUserId == LOGGED_OUT) {
+        if(loggedInUserId == LOGGED_OUT){
             Intent intent = LoginActivity.loginActivityIntentFactory(MainActivity.this);
             startActivity(intent);
             finish();
@@ -42,13 +46,38 @@ public class MainActivity extends AppCompatActivity {
         isAdmin = prefs.getBoolean("isAdmin", false);
 
         setTitle(username);
+
+        adapter = new ShoppingListAdapter(list ->
+                startActivity(ListActivity.listActivityIntentFactory(this, list.getId()))
+        );
+
+        binding.recyclerShoppingLists.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerShoppingLists.setAdapter(adapter);
+
+        binding.buttonAddList.setOnClickListener(v ->
+                startActivity(AddListActivity.addListActivityIntentFactory(this, loggedInUserId))
+        );
+
+        loadShoppingLists();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        loadShoppingLists();
+    }
+
+    private void loadShoppingLists(){
+        repository.getListsByUserId(loggedInUserId).observe(this, lists -> {
+            adapter.setLists(lists);
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         MenuItem adminItem = menu.findItem(R.id.menu_admin);
-        if (adminItem != null) {
+        if(adminItem != null){
             adminItem.setVisible(isAdmin);
         }
         return true;
@@ -56,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_logout) {
+        if(item.getItemId() == R.id.menu_logout){
             SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
@@ -68,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        if (item.getItemId() == R.id.menu_admin) {
+        if(item.getItemId() == R.id.menu_admin){
             Intent intent = AdminActivity.adminActivityIntentFactory(MainActivity.this);
             startActivity(intent);
             return true;

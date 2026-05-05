@@ -24,12 +24,10 @@ public class ListActivity extends AppCompatActivity {
     private ActivityListBinding binding;
     private AppRepository repository;
     private int listId;
-    private int userId;
 
-    static Intent listActivityIntentFactory(Context context, int listId, int userId) {
+    static Intent listActivityIntentFactory(Context context, int listId) {
         Intent intent = new Intent(context, ListActivity.class);
         intent.putExtra(EXTRA_LIST_ID, listId);
-        intent.putExtra(EXTRA_USER_ID, userId);
         return intent;
     }
 
@@ -42,8 +40,6 @@ public class ListActivity extends AppCompatActivity {
         repository = AppRepository.getRepository(getApplication());
 
         listId = getIntent().getIntExtra(EXTRA_LIST_ID, -1);
-        userId = getIntent().getIntExtra(EXTRA_USER_ID, -1);
-
         ItemAdapter adapter = new ItemAdapter(
                 /* onClick = */ item ->
                         startActivity(EditItemActivity.editItemActivityIntentFactory(this, item.getItemId())),
