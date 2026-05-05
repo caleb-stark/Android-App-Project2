@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.project2_android_app.database.entities.User;
 
@@ -19,6 +20,15 @@ public interface UserDAO {
 
     @Delete
     void delete(User user);
+
+    @Update
+    void update(User user);
+
+    @Query("SELECT * FROM " + AppDatabase.USER_TABLE + " WHERE isAdmin = 0 ORDER BY username")
+    LiveData<List<User>> getNonAdminUsers();
+
+    @Query("SELECT * FROM " + AppDatabase.USER_TABLE + " WHERE id = :userId LIMIT 1")
+    User getUserByIdNow(int userId);
 
     @Query("SELECT * FROM " + AppDatabase.USER_TABLE + " ORDER BY username")
     LiveData<List<User>> getAllUsers();

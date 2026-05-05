@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface ShoppingListDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(ShoppingList... list);
+    long insert(ShoppingList list);
 
     @Delete
     void delete(ShoppingList list);

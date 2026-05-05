@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.database.entities.Item;
 import com.example.project2_android_app.databinding.ActivityEditItemBinding;
+import android.view.Menu;
+import android.view.MenuItem;
 
 /**
  * Author: Himansu Yapa
@@ -34,6 +37,8 @@ public class EditItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityEditItemBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
+
 
         repository = AppRepository.getRepository(getApplication());
 
@@ -84,5 +89,20 @@ public class EditItemActivity extends AppCompatActivity {
         repository.deleteItem(currentItem);
         Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        NavHelper.setupMenu(this, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(NavHelper.handleMenuClick(this, item)){
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

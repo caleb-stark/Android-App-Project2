@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.databinding.ActivityListBinding;
 import com.example.project2_android_app.viewholders.ItemAdapter;
+import android.view.Menu;
+import android.view.MenuItem;
 
 /**
  * Shows the items inside a single ShoppingList.
@@ -36,21 +39,42 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
 
         repository = AppRepository.getRepository(getApplication());
 
         listId = getIntent().getIntExtra(EXTRA_LIST_ID, -1);
+
         ItemAdapter adapter = new ItemAdapter(
-                /* onClick = */ item ->
-                        startActivity(EditItemActivity.editItemActivityIntentFactory(this, item.getItemId())),
-                /* onCheckChanged = */ (item, checked) -> {
+                item -> startActivity(EditItemActivity.editItemActivityIntentFactory(this, item.getItemId())),
+                (item, checked) -> {
                     item.setBought(checked);
                     repository.updateItem(item);
-                });
+                }
+        );
+
         binding.recyclerItems.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerItems.setAdapter(adapter);
 
-        binding.buttonAddItem.setOnClickListener(v ->
-                startActivity(AddItemActivity.addItemActivityIntentFactory(this, listId)));
+        repository.getItemsForList(listId).observe(this, adapter::submitList);
+
+        binding.buttonAddItem.setOnClickListener(v -> {
+            startActivity(AddItemActivity.addItemActivityIntentFactory(this, listId));
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        NavHelper.setupMenu(this, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(NavHelper.handleMenuClick(this, item)){
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("username", user.getUsername());
                 editor.putBoolean("isAdmin", user.isAdmin());
+                editor.putInt("userId", user.getId());
                 editor.apply();
 
                 startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.database.entities.Item;
 import com.example.project2_android_app.databinding.ActivityAddItemBinding;
-
+import android.view.Menu;
+import android.view.MenuItem;
 /**
  * Author: Himansu Yapa
  */
@@ -33,6 +35,8 @@ public class AddItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddItemBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
+
 
         repository = AppRepository.getRepository(getApplication());
         listId = getIntent().getIntExtra(EXTRA_LIST_ID, -1);
@@ -62,5 +66,20 @@ public class AddItemActivity extends AppCompatActivity {
         repository.insertItem(item);
         Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        NavHelper.setupMenu(this, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(NavHelper.handleMenuClick(this, item)){
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -75,31 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        MenuItem adminItem = menu.findItem(R.id.menu_admin);
-        if(adminItem != null){
-            adminItem.setVisible(isAdmin);
-        }
+        NavHelper.setupMenu(this, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_logout){
-            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.clear();
-            editor.apply();
-
-            Intent intent = LandingActivity.landingActivityIntentFactory(MainActivity.this);
-            startActivity(intent);
-            finish();
-            return true;
-        }
-
-        if(item.getItemId() == R.id.menu_admin){
-            Intent intent = AdminActivity.adminActivityIntentFactory(MainActivity.this);
-            startActivity(intent);
+        if(NavHelper.handleMenuClick(this, item)){
             return true;
         }
 
