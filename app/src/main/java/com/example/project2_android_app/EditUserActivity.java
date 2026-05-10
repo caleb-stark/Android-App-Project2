@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.database.entities.User;
 import com.example.project2_android_app.databinding.ActivityEditUserBinding;
-
+/**
+ * Author: Caleb Stark
+ */
 public class EditUserActivity extends AppCompatActivity {
     private static final String EXTRA_USER_ID = "com.example.project2_android_app.EXTRA_EDIT_USER_ID";
 

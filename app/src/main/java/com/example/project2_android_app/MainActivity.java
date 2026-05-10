@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.databinding.ActivityMainBinding;
 import com.example.project2_android_app.viewholders.ShoppingListAdapter;
-
+/**
+ * Author: Caleb Stark
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String MAIN_ACTIVITY_USER_ID = "com.example.project2_android_app.MAIN_ACTIVITY_USER_ID";
     private static final int LOGGED_OUT = -1;

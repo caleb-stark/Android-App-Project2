@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.database.entities.ShoppingList;
 import com.example.project2_android_app.databinding.ActivityAddListBinding;
-
+/**
+ * Author: Luis Cortes
+ */
 public class AddListActivity extends AppCompatActivity {
     private ActivityAddListBinding binding;
     private AppRepository repository;

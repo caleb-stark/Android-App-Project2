@@ -13,6 +13,9 @@ import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.database.entities.User;
 import com.example.project2_android_app.databinding.ActivityLoginBinding;
 
+/**
+ * Author: Caleb Stark
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;

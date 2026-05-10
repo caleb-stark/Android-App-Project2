@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.databinding.ActivityLandingBinding;
-
+/**
+ * Author: Luis Cortes
+ */
 public class LandingActivity extends AppCompatActivity {
     private ActivityLandingBinding binding;
 

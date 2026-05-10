@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.database.entities.User;
 import com.example.project2_android_app.databinding.ActivityCreateUserBinding;
-
+/**
+ * Author: Caleb Stark
+ */
 public class CreateUserActivity extends AppCompatActivity {
 
     private ActivityCreateUserBinding binding;

@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.project2_android_app.database.AppRepository;
 import com.example.project2_android_app.databinding.ActivityAdminBinding;
 import com.example.project2_android_app.viewholders.UserAdapter;
-
+/**
+ * Author: Caleb Stark
+ */
 public class AdminActivity extends AppCompatActivity {
 
     private static final String EXTRA_USER_ID = "com.example.project2_android_app.EXTRA_USER_ID";
